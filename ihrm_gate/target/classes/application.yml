@@ -1,0 +1,93 @@
+#服务配置
+server:
+  port: 9090
+#spring配置
+spring:
+  #1.应用配置
+  application:
+    name: ihrm-gate #指定服务名
+  #2.数据库连接池
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ihrm?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: gqaewsd123456
+  #3.JPA
+  jpa:
+    database: MySQL
+    show-sql: true
+    open-in-view: true
+  #4.redis
+  redis:
+    host: 127.0.0.1
+    port: 6379
+#路由规则配置
+zuul:
+  host:
+    connect-timeout-millis: 15000
+    socket-timeout-millis: 60000
+  routes:
+    ihrm-company: #企业
+      path: /company/** #需要映射的路径地址
+      #url: http://127.0.0.1:9001 #映射路径对应的实际微服务的url地址
+      serviceId: IHRM-COMPANY
+      #zuul自动删除请求的前缀 http://127.0.0.1:9001/company
+      stripPrefix: false #不删除请求前缀
+      #处理敏感头信息
+      sentiviteHeaders:    #将指定路由的敏感头设置为空
+      customSensitiveHeaders: true #对指定路由开启自定义敏感头
+    ihrm-system: #系统
+      path: /system/** #需要映射的路径地址
+      serviceId: IHRM-SYSTEM
+      stripPrefix: false #不删除请求前缀
+      sentiviteHeaders:    #将指定路由的敏感头设置为空
+      customSensitiveHeaders: true #对指定路由开启自定义敏感头
+    ihrm-employee: #员工
+      path: /employees/** #需要映射的路径地址
+      serviceId: IHRM-EMPLOYEE
+      stripPrefix: false #不删除请求前缀
+      sentiviteHeaders:    #将指定路由的敏感头设置为空
+      customSensitiveHeaders: true #对指定路由开启自定义敏感头
+    ihrm-social-securitys: #社保
+      path: /social_securitys/** #需要映射的路径地址
+      serviceId: IHRM-SOCIAL-SECURITYS
+      stripPrefix: false #不删除请求前缀
+      sentiviteHeaders:    #将指定路由的敏感头设置为空
+      customSensitiveHeaders: true #对指定路由开启自定义敏感头
+    ihrm-attendance: #考勤
+      path: /atte/** #需要映射的路径地址
+      serviceId: IHRM-ATTENDANCE
+      stripPrefix: false #不删除请求前缀
+      sentiviteHeaders:    #将指定路由的敏感头设置为空
+      customSensitiveHeaders: true #对指定路由开启自定义敏感头
+    ihrm-salarys: #工资
+      path: /salarys/** #需要映射的路径地址
+      serviceId: IHRM-SALARYS
+      stripPrefix: false #不删除请求前缀
+      sentiviteHeaders:    #将指定路由的敏感头设置为空
+      customSensitiveHeaders: true #对指定路由开启自定义敏感头
+    ihrm-user-audit: #审批
+      path: /user/** #需要映射的路径地址
+      serviceId: IHRM-AUDIT
+      stripPrefix: false #不删除请求前缀
+      sentiviteHeaders:    #将指定路由的敏感头设置为空
+      customSensitiveHeaders: true #对指定路由开启自定义敏感头
+
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 10000
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+# 注册到eureka的服务地址
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:6868/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}
