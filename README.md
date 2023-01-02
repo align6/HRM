@@ -4,6 +4,7 @@
 2.Shiro安全框架
 3.Jpa的增删改查
 4.Apache Poi对excel报表生成 JasperReport对pdf报表生成
+
 思路：
 1.学了RBAC权限设计，将人、角色和职能分开创建，增加灵活性
 2.学了点云存储，将员工头像放到外地仓库
